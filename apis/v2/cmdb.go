@@ -1,4 +1,4 @@
-package v1
+package v2
 
 import (
 	"github.com/gin-gonic/gin"
@@ -6,6 +6,6 @@ import (
 
 func GET_CMDB_API(c *gin.Context) {
 	c.JSON(200, gin.H{
-		"message": "cmdb v1 api",
+		"message": "cmdb v2 api",
 	})
 }
