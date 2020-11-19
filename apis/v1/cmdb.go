@@ -1,11 +1,24 @@
 package v1
 
 import (
+	. "GinDemo/common"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
-func GET_CMDB_API(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "cmdb v1 api",
+func GetCmdb(c *gin.Context) {
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": SUCCESS,
+		"msg":  GetMsg(SUCCESS),
+		"data": nil,
+	})
+}
+
+func AddCmdb(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"code": "",
+		"msg":  "",
+		"data": nil,
 	})
 }
