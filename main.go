@@ -7,15 +7,19 @@ import (
 )
 
 func main() {
-	// 设置gind模式
+	// 设置gin的模式
 	gin.SetMode(gin.DebugMode)
 
+	// 获取数据库环境信息并连接
 	var d Database
 	dbInfo := d.GetInfo()
-	dbInfo.GetConnect()
-	println(dbInfo.Password)
-	println(dbInfo.Username)
-	println(dbInfo.Database)
+	db := dbInfo.GetConnect()
+
+	// 检测表模型是否被创建
+	CreateModel(db)
+
+	// 关闭链接
+	defer db.Close()
 
 	// 路由挂载
 	r := InitRouter()

@@ -1,6 +1,7 @@
 package config
 
 import (
+	. "GinDemo/model"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -71,11 +72,12 @@ func (d *Database) GetInfo() DBInfo {
 	return d.Debug
 }
 
-func (d *DBInfo) GetConnect() {
+func (d *DBInfo) GetConnect() *gorm.DB {
 	// 数据库连接信息格式化
 	connArgs := fmt.Sprintf("%s:%s@(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", d.Username, d.Password, d.Hostname, d.Port, d.Database)
 
 	// 连接数据库
+	//var err error
 	db, err := gorm.Open(d.Datatype, connArgs)
 	if err != nil {
 		log.Fatalf("数据库连接失败：%v", err)
@@ -83,5 +85,15 @@ func (d *DBInfo) GetConnect() {
 
 	// 全局禁用表复数
 	db.SingularTable(true)
-	defer db.Close()
+	return db
+}
+
+func CreateModel(db *gorm.DB) {
+	// 检查模型User表是否存在，不存在则创建此表
+	if !db.HasTable(&User{}) {
+		err := db.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&User{}).Error
+		if err != nil {
+			log.Fatalf("模型User表创建失败：%v", err)
+		}
+	}
 }
