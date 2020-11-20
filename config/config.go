@@ -77,7 +77,6 @@ func (d *DBInfo) GetConnect() *gorm.DB {
 	connArgs := fmt.Sprintf("%s:%s@(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", d.Username, d.Password, d.Hostname, d.Port, d.Database)
 
 	// 连接数据库
-	//var err error
 	db, err := gorm.Open(d.Datatype, connArgs)
 	if err != nil {
 		log.Fatalf("数据库连接失败：%v", err)
@@ -85,6 +84,8 @@ func (d *DBInfo) GetConnect() *gorm.DB {
 
 	// 全局禁用表复数
 	db.SingularTable(true)
+
+	// 返回Connect对象
 	return db
 }
 
