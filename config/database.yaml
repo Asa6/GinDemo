@@ -1,0 +1,27 @@
+# 开发环境数据库配置
+debug:
+  datatype: mysql
+  hostname: 47.95.0.177
+  database: gin_demo
+  username: cmdb_hy
+  password: iowkduw123
+  port: 3306
+
+# 测试环境数据库配置
+test:
+  datatype: mysql
+  hostname: localhost
+  database: test
+  username: root
+  password: 123456
+  port: 3306
+
+# 生产环境数据库配置
+release:
+  datatype: mysql
+  hostname: localhost
+  database: release
+  username: root
+  password: 123456
+  port: 3306
+
