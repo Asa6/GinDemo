@@ -16,7 +16,7 @@ func main() {
 	db := dbInfo.GetConnect()
 
 	// 检测表模型是否被创建
-	CreateModel(db)
+	//CreateModel(db)
 
 	// 关闭链接
 	defer db.Close()

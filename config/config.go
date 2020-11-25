@@ -85,6 +85,9 @@ func (d *DBInfo) GetConnect() *gorm.DB {
 	// 全局禁用表复数
 	db.SingularTable(true)
 
+	// 自动迁移
+	db.AutoMigrate(&User{})
+
 	// 返回Connect对象
 	return db
 }
