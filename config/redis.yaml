@@ -1,0 +1,21 @@
+# 开发环境redis配置
+debug:
+  hostname: 47.95.0.177
+  database: 4
+  port: 6379
+  password: aFcD1jf3
+
+# 测试环境redis配置
+test:
+  hostname: 47.95.0.177
+  database: 4
+  port: 6379
+  password: aFcD1jf3
+
+# 生产环境redis配置
+release:
+  hostname: 47.95.0.177
+  database: 4
+  port: 6379
+  password: aFcD1jf3
+
