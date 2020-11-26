@@ -1,0 +1,1 @@
+基于Gin，构建的RESTful API项目结构，并集成了gorm和go-redis,参考本Demo
