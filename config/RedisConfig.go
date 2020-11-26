@@ -1,6 +1,7 @@
 package config
 
 import (
+	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
@@ -69,6 +70,7 @@ func (rn *RedisENV) GetInfo() RedisInfo {
 }
 
 var RDB *redis.Client
+var Ctx = context.Background()
 
 func (ri *RedisInfo) GetRedisClient() {
 	// ri.Database为string类型，需要转换为int类型

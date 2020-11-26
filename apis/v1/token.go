@@ -4,7 +4,6 @@ import (
 	. "GinDemo/common"
 	. "GinDemo/config"
 	. "GinDemo/model"
-	"context"
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
@@ -12,8 +11,6 @@ import (
 	"net/http"
 	"time"
 )
-
-var ctx = context.Background()
 
 func AddToken(c *gin.Context) {
 	// 解析json请求
@@ -38,17 +35,11 @@ func AddToken(c *gin.Context) {
 		token := hex.EncodeToString(m5.Sum(nil))
 
 		// 缓存进redis，7天自动过期
-		err := RDB.Set(ctx, "token_"+token, u.UserName, 7*24*time.Hour).Err()
+		err := RDB.Set(Ctx, "token_"+token, u.UserName, 7*24*time.Hour).Err()
 		if err != nil {
 			//panic(err)
 			fmt.Println("token申请失败：", err)
 		}
-
-		//val, err := RDB.Get(ctx, "key").Result()
-		//if err != nil {
-		//	panic(err)
-		//}
-		//fmt.Println("key", val)
 
 		JsonResponse(c, http.StatusOK, SUCCESS, GetMsg(SUCCESS), map[string]string{"token": token})
 	}
