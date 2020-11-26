@@ -1,10 +1,10 @@
 package model
 
 type User struct {
-	ID       uint // 字段`ID`为默认主键
-	UserName string
+	ID       uint   // 字段`ID`为默认主键
+	UserName string `gorm:"unique_index" json:"username"`
 	Email    string `gorm:"type:varchar(100);unique_index"` // `type`设置sql类型, `unique_index` 为该列设置唯一索引
-	PassWord string
+	PassWord string `json:"password"`
 	FullName string
 }
 

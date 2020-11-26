@@ -7,19 +7,18 @@ import (
 )
 
 func main() {
-	// 设置gin的模式
-	gin.SetMode(gin.DebugMode)
+	gin.SetMode(gin.DebugMode) // 设置gin的模式
 
-	// 获取数据库环境信息并连接
-	var d Database
-	dbInfo := d.GetInfo()
-	db := dbInfo.GetConnect()
+	var d DBEnv
+	dbInfo := d.GetInfo() // 获取数据库环境信息并连接
+	dbInfo.GetConnect()   // 连接数据库
 
-	// 检测表模型是否被创建
-	//CreateModel(db)
+	//CreateModel()				// 检测表模型是否被创建
+	defer DB.Close() // 关闭数据库链接
 
-	// 关闭链接
-	defer db.Close()
+	var rn RedisENV
+	redisInfo := rn.GetInfo()  // 获取redis环境信息
+	redisInfo.GetRedisClient() // 连接redis
 
 	// 路由挂载
 	r := InitRouter()

@@ -5,10 +5,10 @@ import (
 )
 
 // 统一的json返回组件
-func JsonResponse(c *gin.Context, HTTPCode int, code int, msg string) {
+func JsonResponse(c *gin.Context, HTTPCode int, code int, msg string, data interface{}) {
 	c.JSON(HTTPCode, gin.H{
 		"code": code,
 		"msg":  msg,
-		"data": nil,
+		"data": data,
 	})
 }

@@ -11,6 +11,7 @@ import (
 	"log"
 	"os"
 	"runtime"
+	"time"
 )
 
 // 数据库信息
@@ -24,14 +25,14 @@ type DBInfo struct {
 }
 
 // 区分数据库环境
-type Database struct {
+type DBEnv struct {
 	Debug   DBInfo
 	Test    DBInfo
 	Release DBInfo
 }
 
 //获取数据库配置
-func (d *Database) GetInfo() DBInfo {
+func (d *DBEnv) GetInfo() DBInfo {
 	// 获取操作系统类型
 	ostype := runtime.GOOS
 
@@ -72,30 +73,36 @@ func (d *Database) GetInfo() DBInfo {
 	return d.Debug
 }
 
-func (d *DBInfo) GetConnect() *gorm.DB {
+// 声明公共的数据库连接句柄
+var DB *gorm.DB
+
+func (d *DBInfo) GetConnect() {
 	// 数据库连接信息格式化
 	connArgs := fmt.Sprintf("%s:%s@(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", d.Username, d.Password, d.Hostname, d.Port, d.Database)
 
+	var err error
 	// 连接数据库
-	db, err := gorm.Open(d.Datatype, connArgs)
+	DB, err = gorm.Open(d.Datatype, connArgs)
 	if err != nil {
 		log.Fatalf("数据库连接失败：%v", err)
 	}
 
+	// 报错： invalid connection问题
+	// 解决： 设置一个连接被使用的最长时间，即过了一段时间后会被强制回收，理论上这可以有效减少不可用连接出现的概率。当数据库方面也设置了连接的超时时间时(mysql默认8小时)，这个值应当不超过数据库的超时参数值。
+	DB.DB().SetConnMaxIdleTime(time.Minute)
+
 	// 全局禁用表复数
-	db.SingularTable(true)
+	DB.SingularTable(true)
 
 	// 自动迁移
-	db.AutoMigrate(&User{})
-
-	// 返回Connect对象
-	return db
+	DB.AutoMigrate(&User{})
 }
 
-func CreateModel(db *gorm.DB) {
+// 已开启自动迁移，无需调用此func
+func CreateModel() {
 	// 检查模型User表是否存在，不存在则创建此表
-	if !db.HasTable(&User{}) {
-		err := db.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&User{}).Error
+	if !DB.HasTable(&User{}) {
+		err := DB.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&User{}).Error
 		if err != nil {
 			log.Fatalf("模型User表创建失败：%v", err)
 		}
